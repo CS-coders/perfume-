@@ -54,7 +54,34 @@ let searchBox = document.getElementById('search-box');
 
     moveText();
 
-function search() {
-  // Add your search functionality here
-  alert('Search functionality to be implemented');
-}
+    function searchAndRedirect() {
+      var searchTerm = document.getElementById('search-box').value.trim().toLowerCase();
+
+      if (searchTerm === "") {
+          alert("Please enter a search term");
+          return;
+      }
+
+      var elements = document.querySelectorAll('body *');
+      var found = false;
+
+      elements.forEach(function (element) {
+          var textContent = element.textContent.trim().toLowerCase();
+
+          if (textContent.includes(searchTerm) && !found) {
+              // Highlight the matching word
+              var regex = new RegExp('\\b' + searchTerm + '\\b', 'gi');
+              var highlightedText = element.innerHTML.replace(regex, '<span class="highlight">$&</span>');
+              element.innerHTML = highlightedText;
+
+              // Scroll to the first occurrence
+              element.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
+
+              found = true; // Stop after the first occurrence
+          }
+      });
+
+      if (!found) {
+          alert("Search term not found");
+      }
+  }
